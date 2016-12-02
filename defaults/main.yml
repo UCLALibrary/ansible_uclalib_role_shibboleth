@@ -1,0 +1,8 @@
+---
+
+# Shibboleth Yum Repository URL
+shibboleth_yumrepo_url: http://download.opensuse.org/repositories/security:/shibboleth/RHEL_6/security:shibboleth.repo
+
+shib_entity_id: http://website.library.ucla.edu/shibboleth-sp
+
+shib_home_url: http://website.library.ucla.edu

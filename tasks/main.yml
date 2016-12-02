@@ -1,0 +1,24 @@
+---
+
+- name: Put in place the Shibboleth Yum Repository
+  get_url:
+    url: "{{ shibboleth_yumrepo_url }}"
+    dest: "/etc/yum.repos.d/security_shibboleth.repo"
+    mode: 0644
+
+- name: Install Shibboleth SP
+  yum: name=shibboleth state=installed
+
+- name: Ensure Shibboleth Starts on Boot
+  service: name=shibd enabled=yes
+
+- name: Put in place UCLA-specific IAM shibboleth2.xml file
+  template:
+    src: "shibboleth2_xml.j2"
+    dest: "/etc/shibboleth/shibboleth2.xml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: "yes"
+  notify:
+    - restart shibd
