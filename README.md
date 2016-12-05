@@ -3,15 +3,23 @@ Ansible role to install the Shibboleth SP on Library RHEL Systems
 
 # Dependencies/Considerations
 
-You have a working Apache HTTPD environment on the server. This role installs a shibboleth apache config file to `/etc/httpd/conf.d/shib.conf`.
-
-Setting-up a new Shibboleth SP involves working with UCLA campus IAM to register your application.
+### UCLA Campus IAM Support
+Setting-up a new Shibboleth SP involves working with the UCLA IAM team to register your application.
 
 To provision a working Shibboleth SP application at UCLA, reference the following documentation:
 - [IAM UCLA Shibboleth Set-up Docs](https://spaces.ais.ucla.edu/x/3A03AQ)
 - [UCLA Library Specific Shibboleth Implementation](https://docs.library.ucla.edu/x/XIDSB)
 
-Since Shibboleth works with Apache HTTPD, your virtual host should contain a Location stanza with the appropriate Shibboleth configuration parameters. For example:
+### Attribute Map
+Shibboleth requires a properly configured `attribute-map.xml` file. This role installs the default attribute-map file provided by UCLA IAM. As a part of the initial installation/configuration of Shibboleth, you will need to manually edit this file to include the attributes you requested, and that were approved/released, for your application. Common attributes released for UCLA applications can be found here: [List of Most Common Data Attributes](https://spaces.ais.ucla.edu/x/EoFSAw).
+
+### Attribute Policy
+Shibboleth requires an `attribute-policy.xml` file. This role installs the default attribute-policy file provided by UCLA IAM. Under most circumstances, the default should be sufficient and no manual editing is necessary. However contact the UCLA IAM team for clarification.
+
+### Apache HTTP Config
+You must have a working Apache HTTPD environment on the server. This role installs a shibboleth apache config file to `/etc/httpd/conf.d/shib.conf`.
+
+Since Shibboleth works with Apache HTTPD, your virtual host should contain a `Location` stanza with the appropriate Shibboleth configuration parameters. For example:
 ```
 <Location /path >
   AuthType Shibboleth
@@ -48,7 +56,7 @@ In your play you will want to set your own values for `shib_entity_id` and `shib
   hosts: test
   vars:
     shib_entity_id: http://librarysite.library.ucla.edu/shibboleth-sp
-    shib_home_url: http://libraryste.library.ucla.edu
+    shib_home_url: http://librarysite.library.ucla.edu
 
   roles:
     - { role: uclalib_role_shibboleth }

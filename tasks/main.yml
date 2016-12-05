@@ -8,6 +8,7 @@
 
 - name: Install Shibboleth SP
   yum: name=shibboleth state=installed
+  register: shib_install
 
 - name: Ensure Shibboleth Starts on Boot
   service: name=shibd enabled=yes
@@ -20,5 +21,30 @@
     group: "root"
     mode: 0644
     backup: "yes"
+  when: shib_install.changed
+  notify:
+    - restart shibd
+
+- name: Put in place the UCLA-default IAM attribute-map.xml file
+  copy:
+    src: "attribute-map.xml"
+    dest: "/etc/shibboleth/attribute-map.xml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: "yes"
+  when: shib_install.changed
+  notify:
+    - restart shibd
+
+- name: Put in place the UCLA-default IAM attribute-policy.xml file
+  copy:
+    src: "attribute-policy.xml"
+    dest: "/etc/shibboleth/attribute-policy.xml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    backup: "yes"
+  when: shib_install.changed
   notify:
     - restart shibd
