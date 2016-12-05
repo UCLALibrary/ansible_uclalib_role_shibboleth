@@ -24,6 +24,7 @@
   when: shib_install.changed
   notify:
     - restart shibd
+    - restart httpd
 
 - name: Put in place the UCLA-default IAM attribute-map.xml file
   copy:
@@ -36,6 +37,7 @@
   when: shib_install.changed
   notify:
     - restart shibd
+    - restart httpd
 
 - name: Put in place the UCLA-default IAM attribute-policy.xml file
   copy:
@@ -48,3 +50,4 @@
   when: shib_install.changed
   notify:
     - restart shibd
+    - restart httpd
