@@ -29,6 +29,22 @@ Since Shibboleth works with Apache HTTPD, your virtual host should contain a `Lo
 </Location>
 ```
 
+If your SP is using an ApplicationOverride, meaning your `shibboleth2.xml` file contains:
+```
+<ApplicationOverride id="app-name" entityID="https://entityidname.library.ucla.edu/shibboleth-sp"/>
+```
+
+Then your `Location` stanza would like this:
+```
+<Location /path >
+  AuthType Shibboleth
+  ShibRequireSession On
+  ShibRequestSetting applicationId app-name
+  ShibUseHeaders On
+  require shibboleth
+</Location>
+```
+
 # Role variables
 * URL to the Shibboleth Yum Repository configuration file
 ```
